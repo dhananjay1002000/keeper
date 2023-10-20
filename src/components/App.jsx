@@ -7,7 +7,7 @@ import axios from "axios";
 
 const url = "process.env.REACT_APP_SERVER_URL"
 function App() {
-  coonsole.log(url);
+  console.log(url);
   const [noteList, setNoteList] = useState([]);
   useEffect(()=>{
     loadData();
