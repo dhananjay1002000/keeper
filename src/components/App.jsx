@@ -7,7 +7,7 @@ import axios from "axios";
 
 
 function App() {
-  const url = "http://localhost:4000"
+  const url = "process.env.REACT_APP_SERVER_URL"
   const [noteList, setNoteList] = useState([]);
   useEffect(()=>{
     loadData();
@@ -39,7 +39,7 @@ function App() {
       });
     });
      try{
-        await axios.delete(`http://localhost:4000/del/${delId}`);
+        await axios.delete(`${url}/del/${delId}`);
      }
      catch(err){
       console.error(err);
@@ -74,3 +74,4 @@ function App() {
 }
 
 export default App;
+export {url};
