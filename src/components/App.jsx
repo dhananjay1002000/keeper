@@ -5,7 +5,7 @@ import Note from "./Note";
 import CreateArea from "./CreateArea";
 import axios from "axios";
 
-const url = "https://keeper-app-server-llg6.onrender.com";
+const url = process.env.REACT_APP_SERVER_URL;
 function App() {
   console.log(url);
   const [noteList, setNoteList] = useState([]);
