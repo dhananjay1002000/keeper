@@ -3,6 +3,7 @@ import axios from "axios";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
+import { url } from "./App";
 
 function Note(props) {
   const [isEditable , setIsEditable] = useState(false);
@@ -21,7 +22,7 @@ function Note(props) {
     event.preventDefault();
     setIsEditable(prevValue => !prevValue);
     try{
-      await axios.put(`http://localhost:4000/put/${props.delId}` , textInput);
+      await axios.put(`${url}/put/${props.delId}` , textInput);
     }
     catch(err){
       console.error("An error occurred: "  , err);
@@ -59,3 +60,4 @@ function Note(props) {
 }
 
 export default Note;
+
