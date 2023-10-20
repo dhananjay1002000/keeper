@@ -1,63 +1,84 @@
 import React, { useState } from "react";
-import axios from "axios";
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
+import axios from "axios"
+import AddIcon from '@mui/icons-material/Add';
+import { Zoom } from '@mui/material';
 import { url } from "./App";
 
-function Note(props) {
-  const [isEditable , setIsEditable] = useState(false);
+function CreateArea(props) {
   const [textInput, setInputText] = useState({
-    title: props.title,
-    content: props.content
+    title: "",
+    content: ""
   });
-
-  function handleEditOnClick(event){
-    setIsEditable(prevValue => !prevValue);
-    console.log(isEditable);
-    event.preventDefault();
+  const [isExpanded , setIsExpanded] = useState(false);
+  function handleIsExpanded(){
+       setIsExpanded(true);
   }
 
-  async function handleSaveOnClick(event){
-    event.preventDefault();
-    setIsEditable(prevValue => !prevValue);
-    try{
-      await axios.put(`${url}/put/${props.delId}` , textInput);
-    }
-    catch(err){
-      console.error("An error occurred: "  , err);
-    }
-    
-  }
-
-  function handleOnChange(event){
-    const {name , value} = event.target;
-    setInputText( (prevValue) => {
-     return {
-      ...prevValue,
-      [name]:value
-     }
-    })
-    console.log(textInput);
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setInputText((prevValue) => {
+      return {
+        ...prevValue,
+        [name]: value
+      };
+    });
   }
 
   return (
-    <div  >
-      <form className="note-form">
-        <input type="text" value= {textInput.title} name="title" disabled = {!isEditable} onChange={handleOnChange} />
-        {
-          !isEditable ? <button className="add-bt" onClick={handleEditOnClick}> <EditIcon /> </button> : <button className="add-bt"  onClick={handleSaveOnClick} > <SaveIcon /> </button>
-        }
-        <textarea type="text" value={textInput.content} name="content" disabled = {!isEditable} onChange={handleOnChange}/>
-        <button className="del-bt" onClick={(event)=>{
-            event.preventDefault();
-            console.log(props.id);
-            props.handleDelete(props.delId , props.id);
-        }}><DeleteIcon /></button>
+    <div>
+      <form>   
+        <input
+        name="title"
+        onChange={handleChange}
+        placeholder="Title"
+        value={textInput.title}
+        onClick={handleIsExpanded}
+      />
+      {
+        isExpanded && 
+      <textarea
+          name="content"
+          onChange={handleChange}
+          placeholder="Take a note..."
+          rows="3"
+          value={textInput.content}
+      />
+      
+      }
+      
+      
+        
+       {
+        isExpanded &&  <button className="bt"
+        onClick={async (event) => {
+          event.preventDefault();
+          try{
+            
+              await axios.post(`${url}/post` , textInput);
+              props.handleOnClick();
+                 
+          }catch(err){
+            console.error("Error post data: "  , err);
+          }
+          setInputText({
+            title: "",
+            content: ""
+          });
+          setIsExpanded(false);
+          
+        }}
+      >
+    <Zoom in= {isExpanded}>
+        <AddIcon  />
+    </Zoom>
+        
+      </button>
+       }
       </form>
     </div>
   );
 }
 
-export default Note;
+export default CreateArea;
+
 
